@@ -1,0 +1,158 @@
+﻿@model ContosoUniversity.Models.Student
+
+
+@{
+    ViewBag.Title = "Details";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
+<h2>Details</h2>
+
+<div>
+    <h4>Student</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstMidName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstMidName)
+        </dd>
+        <!-- menampilkan title -->
+        <dt>
+            @Html.DisplayNameFor(model => model.EnrollmentDate)
+        </dt>
+        <!-- menampilkan data -->
+        <dd>
+            @Html.DisplayFor(model => model.EnrollmentDate)
+        </dd>
+      
+        <dt>
+            @Html.DisplayNameFor(model => model.Enrollments)
+        </dt>
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Title</th>
+                    <th>Grade</th>
+                </tr>
+                @foreach(var item in Model.Enrollments)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Course.Title)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Grade)</td>
+                    </tr>
+                    
+                }
+            </table>
+        </dd>
+
+    </dl>
+  
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+@{
+
+
+    int Grad;
+    int A = 0;
+    int B = 0;
+    int C = 0;
+    int D = 0;
+    int F = 0;
+
+
+    foreach (var wih in Model.Enrollments)
+    {
+
+        Grad = Convert.ToInt32(wih.Grade);
+
+        if (Grad == 0)
+        {
+            A = A + 1;
+        }
+        if (Grad == 1)
+        {
+            B = B + 1;
+        }
+        if (Grad == 2)
+        {
+            C = C + 1;
+        }
+        if (Grad == 3)
+        {
+            D = D + 1;
+        }
+        if (Grad == 4)
+        {
+            F = F + 1;
+        }
+        if (wih.Grade == null)
+        {
+            A = 0;
+            B = 0;
+            C = 0;
+            D = 0;
+            F = 0;
+        }
+
+    }
+}
+<canvas id="myChart" width="100" height="50"></canvas>
+<script>
+    var r1 = "@A";
+    var r2 = "@B";
+    var r3 = "@C";
+    var r4 = "@D";
+    var r5 = "@F";
+    var ctx = document.getElementById("myChart");
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["A", "B", "C", "D", "F"],
+            datasets: [{
+                label: "Student Grade #",
+                data: [r1, r2, r3, r4, r5],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+</script>
